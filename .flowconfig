@@ -1,0 +1,14 @@
+[ignore]
+
+[include]
+./src/
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+esproposal.decorators=ignore
+
+[strict]
