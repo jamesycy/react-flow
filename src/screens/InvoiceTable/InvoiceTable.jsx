@@ -93,7 +93,7 @@ export default class InvoiceTable extends React.Component<any, InvoiceState> {
                   <Button color="primary" onClick={() => this.toggle("info", invoice)}>{ invoice.invoice_no }</Button>
                 </TableCell>
                 <TableCell>
-                  <Button color="primary" onClick={() => this.toggle("payment", invoice)}>{ invoice.helper.name }</Button>
+                  <Button color="primary" onClick={() => this.toggle("helper", invoice)}>{ invoice.helper.name }</Button>
                 </TableCell>
                 <TableCell>
                   <Button color="primary" onClick={() => this.toggle("employer", invoice)}>{ invoice.employer.name }</Button>

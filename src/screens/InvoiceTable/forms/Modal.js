@@ -12,6 +12,9 @@ import ImmigrationForm from './ImmigrationForm'
 import ConsulateForm from './ConsulateForm'
 import ArrivalForm from './ArrivalForm'
 
+import HelperForm from './HelperForm'
+import EmployerForm from './EmployerForm'
+
 type ModalFormProps = {
     values: InvoiceType,
     toggle: string,
@@ -29,7 +32,7 @@ export default class InfoFormWrapper extends React.Component<ModalFormProps> {
         }
     }
 
-    submitForm = async (values: InvoiceType, setSubmitting: Function) => {
+    submitInvoiceForm = async (values: InvoiceType, setSubmitting: Function) => {
         const id = this.props.values.id
         const batch = firebase.firestore().batch()
         batch.update(firebase.firestore().collection("invoice").doc(id), values)
@@ -50,12 +53,16 @@ export default class InfoFormWrapper extends React.Component<ModalFormProps> {
     render() {
         const { toggle, values, closePrompt } = this.props
         return (
-            <Modal open={toggle !== "" && values !== null} onClose={closePrompt}>
+            <Modal open={toggle !== "" && values !== null} onClose={closePrompt} style={{ overflowY: 'scroll' }}>
                 <Paper style={this.styles.modal}>
-                    <Formik 
-                        initialValues={values}
-                        onSubmit={(values, { setSubmitting }) => this.submitForm(values, setSubmitting)}
-                        render={props => this.renderForm(props) }/>
+                    { this.props.toggle !== "employer" || this.props.toggle !== "helper" &&
+                        <Formik 
+                            initialValues={values}
+                            onSubmit={(values, { setSubmitting }) => this.submitInvoiceForm(values, setSubmitting)}
+                            render={props => this.renderForm(props) }/>
+                    }
+                    { this.props.toggle === "employer" && <EmployerForm id={values.employer.id} /> }
+                    { this.props.toggle === "helper" && <HelperForm id={values.helper.id} /> }
                 </Paper>
             </Modal>
         )

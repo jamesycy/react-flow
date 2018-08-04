@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid, TextField, Button, Typography } from '@material-ui/core'
 import InvoiceType from '../../../types/Invoice'
 
 type FormProps = {
@@ -15,6 +15,10 @@ export default class InfoForm extends React.Component<FormProps> {
         const { values, handleChange, isSubmitting, handleSubmit } = this.props
         return (
             <Grid container spacing={16}>
+                <Grid item xs={12}>
+                    <Typography variant="headline">Invoice Info</Typography>
+                </Grid>
+
                 <Grid item xs={6}>
                     <TextField label="Invoice No." fullWidth
                         value={values.invoice_no} name="invoice_no" onChange={handleChange} disabled={isSubmitting} />

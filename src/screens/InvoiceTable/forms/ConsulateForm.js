@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
-import { Grid, TextField, Button, MenuItem } from '@material-ui/core'
+import { Grid, TextField, InputLabel, Button, Typography } from '@material-ui/core'
 import InvoiceType from '../../../types/Invoice'
 
 type FormProps = {
@@ -16,13 +15,19 @@ export default class ConsulateForm extends React.Component<FormProps> {
         const { values, handleChange, isSubmitting, handleSubmit } = this.props
         return (
             <Grid container spacing={16}>
+                <Grid item xs={12}>
+                    <Typography variant="headline">Consulate Info</Typography>
+                </Grid>
+
                 <Grid item xs={6}>
-                    <TextField label="Entry Date" fullWidth type="date"
+                    <InputLabel htmlFor="entry_date">Entry Date</InputLabel>
+                    <TextField fullWidth type="date" id="entry_date"
                         value={values.consulate.entry} name="consulate.entry" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField label="Exit Date" fullWidth type="date"
+                    <InputLabel htmlFor="exit_date">Exit Date</InputLabel>
+                    <TextField fullWidth type="date" id="exit_date"
                         value={values.consulate.exit} name="consulate.visa_aquire" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 

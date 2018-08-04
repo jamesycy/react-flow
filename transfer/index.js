@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const moment = require("moment")
 const firebase = require("firebase/app")
-const firebaseConfig = require("../firebase.json")
+const firebaseConfig = require("../src/firebase.json")
 
 require("firebase/firestore")
 
@@ -63,6 +63,31 @@ async function FixFSInvoiceCreatedAt() {
     })
 }
 
+function formatDate(date) {
+    if (date !== "") {
+        return moment(date, "DD/MM/YYYY").format("YYYY-MM-DD")
+    } else {
+        return ""
+    }
+}
+
+async function FixFSInvoiceDateFormat() {
+    const batch = firebase.firestore().batch()
+    const snapshot = await firebase.firestore().collection("invoice").get()
+    snapshot.forEach(function(invoice) {
+        const data = invoice.data()
+        batch.update(firebase.firestore().collection("invoice").doc(invoice.id), {
+            arrival: { ...data.arrival, pickup: formatDate(data.arrival.pickup) },
+            consulate: { ...data.consulate, entry: formatDate(data.consulate.entry), exit: formatDate(data.consulate.exit) },
+            immigration: { ...data.immigration, entry: formatDate(data.immigration.entry), visa_aquire: formatDate(data.immigration.visa_aquire), visa_expire: formatDate(data.immigration.visa_expire) },
+            payment: { ...data.payment, pay_date: formatDate(data.payment.pay_date) }
+        })
+    })
+    batch.commit().then(function() {
+        console.log("FIX Invoice Date Format")
+    })
+}
+
 async function FixFSHelperCreatedAt() {
     const batch = firebase.firestore().batch()
     const snapshot = await firebase.firestore().collection("helper").get()
@@ -85,4 +110,4 @@ async function FixFSEmployerCreatedAt() {
     })
 }
 
-FixFSInvoiceCreatedAt()
+FixFSInvoiceDateFormat()

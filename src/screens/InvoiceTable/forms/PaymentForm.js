@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid, TextField, Button, Typography, InputLabel } from '@material-ui/core'
 import InvoiceType from '../../../types/Invoice'
 
 type FormProps = {
@@ -16,8 +15,13 @@ export default class PaymentForm extends React.Component<FormProps> {
         const { values, handleChange, isSubmitting, handleSubmit } = this.props
         return (
             <Grid container spacing={16}>
+                <Grid item xs={12}>
+                    <Typography variant="headline">Payment Info</Typography>
+                </Grid>
+
                 <Grid item xs={6}>
-                    <TextField label="Pay Date" fullWidth type="date"
+                    <InputLabel htmlForm="pay_date">Pay Date</InputLabel>
+                    <TextField fullWidth type="date" id="pay_date"
                         value={values.payment.pay_date} name="payment.pay_date" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 

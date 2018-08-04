@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
-import { Grid, TextField, Button, MenuItem } from '@material-ui/core'
+import { Grid, TextField, InputLabel, Button, Typography } from '@material-ui/core'
 import InvoiceType from '../../../types/Invoice'
 
 type FormProps = {
@@ -16,13 +15,19 @@ export default class ArrivalForm extends React.Component<FormProps> {
         const { values, handleChange, isSubmitting, handleSubmit } = this.props
         return (
             <Grid container spacing={16}>
+                <Grid item xs={12}>
+                    <Typography variant="headline">Arrival Info</Typography>
+                </Grid>
+
                 <Grid item xs={6}>
-                    <TextField label="Pickup Date" fullWidth type="date"
+                    <InputLabel htmlFor="pickup_date">Pickup Date</InputLabel>
+                    <TextField fullWidth type="date" id="pickup_date"
                         value={values.arrival.pickup} name="arrival.pickup" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField label="Exit Date" fullWidth type="date"
+                    <InputLabel htmlFor="ticket">Ticket Board Date</InputLabel>
+                    <TextField fullWidth type="date" id="ticket"
                         value={values.arrival.ticket_aboard} name="arrival.ticket_aboard" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
