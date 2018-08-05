@@ -3,6 +3,10 @@ import React from 'react'
 import { Paper, Grid, TextField, List, ListItem, ListItemText, ListSubheader, Avatar } from '@material-ui/core'
 import { Receipt, Face, PersonPin } from '@material-ui/icons'
 
+import InvoiceDialog from './InvoiceDialog'
+import HelperDialog from './HelperDialog'
+import EmployerDialog from './EmployerDialog'
+
 import InvoiceType from '../../types/InvoiceFormType'
 
 import firebase from 'firebase/app'
@@ -16,13 +20,12 @@ type ResultsType = {
 
 type State = {
     search: string,
-    results: ?ResultsType
+    results: ?ResultsType,
+    dialog: string,
+    dialog_target: string
 }
 
 export default class SearchIndex extends React.Component<any,State> {
-    helperRef: firebase.firestore.CollectionReference = firebase.firestore().collection("helper")
-    employerRef: firebase.firestore.CollectionReference = firebase.firestore().collection("employer")
-    invoiceRef: firebase.firestore.CollectionReference = firebase.firestore().collection("invoice")
     helperIndexRef: firebase.firestore.CollectionReference = firebase.firestore().collection("helper_index")
     employerIndexRef: firebase.firestore.CollectionReference = firebase.firestore().collection("employer_index")
     invoiceIndexRef: firebase.firestore.CollectionReference = firebase.firestore().collection("invoice_index")
@@ -38,7 +41,9 @@ export default class SearchIndex extends React.Component<any,State> {
 
     state = {
         search: "",
-        results: null
+        results: null,
+        dialog: "",
+        dialog_target: ""
     }
 
     changeSearch = (e: any) => {
@@ -84,6 +89,22 @@ export default class SearchIndex extends React.Component<any,State> {
         return snapshot.docs
     }
 
+    showDialog = (type: string, id: string) => {
+        this.setState(state => {
+            state.dialog = type
+            state.dialog_target = id
+            return state
+        })
+    }
+
+    closeDialog = () => {
+        this.setState(state => {
+            state.dialog = ""
+            state.dialog_target = ""
+            return state
+        })
+    }
+
     render() {
         console.log(this.state.results)
         return (
@@ -104,7 +125,7 @@ export default class SearchIndex extends React.Component<any,State> {
                                     <List>
                                         <ListSubheader>Results in "Invoices"</ListSubheader>
                                         { this.state.results.invoice.map((result, i) => (
-                                            <ListItem key={i}>
+                                            <ListItem key={i} onClick={() => this.showDialog("invoice", result.id)}>
                                                 <Avatar>
                                                     <Receipt/>
                                                 </Avatar>
@@ -118,7 +139,7 @@ export default class SearchIndex extends React.Component<any,State> {
                                     <List>
                                         <ListSubheader>Results in "Employer"</ListSubheader>
                                         { this.state.results.employer.map((result, i) => (
-                                            <ListItem key={i}>
+                                            <ListItem key={i} onClick={() => this.showDialog("employer", result.id)}>
                                                 <Avatar>
                                                     <Face/>
                                                 </Avatar>
@@ -132,7 +153,7 @@ export default class SearchIndex extends React.Component<any,State> {
                                     <List>
                                         <ListSubheader>Results in "Helper"</ListSubheader>
                                         { this.state.results.helper.map((result, i) => (
-                                            <ListItem key={i}>
+                                            <ListItem key={i} onClick={() => this.showDialog("helper", result.id)}>
                                                 <Avatar>
                                                     <PersonPin/>
                                                 </Avatar>
@@ -145,6 +166,11 @@ export default class SearchIndex extends React.Component<any,State> {
                         </Grid>
                     }
                 </Paper>
+
+                { this.state.dialog === "invoice" && <InvoiceDialog id={this.state.dialog_target} closeDialog={this.closeDialog} /> }
+                { this.state.dialog === "helper" && <HelperDialog id={this.state.dialog_target} closeDialog={this.closeDialog} /> }
+                { this.state.dialog === "employer" && <EmployerDialog id={this.state.dialog_target} closeDialog={this.closeDialog} /> }
+
             </React.Fragment>
         )
     }
