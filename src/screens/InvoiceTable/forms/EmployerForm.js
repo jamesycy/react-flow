@@ -20,7 +20,7 @@ class EmployerForm extends React.Component<FormProps> {
         return (
             <Grid container spacing={16}>
                 <Grid item xs={12}>
-                    <Typography variant="headline">Helper Info</Typography>
+                    <Typography variant="headline">Employer Info</Typography>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -29,23 +29,23 @@ class EmployerForm extends React.Component<FormProps> {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField fullWidth disabled={isSubmitting} label="OP"
+                    <TextField fullWidth disabled={isSubmitting} label="Nickname"
                         value={values.nickname} name="nickname" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField fullWidth disabled={isSubmitting} label="Age"
-                        value={values.district} name="age" onChange={handleChange} />
+                    <TextField fullWidth disabled={isSubmitting} label="District"
+                        value={values.district} name="district" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField fullWidth disabled={isSubmitting} label="Nationality"
-                        value={values.hkid} name="nationality" onChange={handleChange} />
+                    <TextField fullWidth disabled={isSubmitting} label="HKID"
+                        value={values.hkid} name="hkid" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>
-                    <TextField fullWidth disabled={isSubmitting} label="Email"
-                        value={values.refer} name="email" onChange={handleChange} />
+                    <TextField fullWidth disabled={isSubmitting} label="Referral"
+                        value={values.refer} name="refer" onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12}>

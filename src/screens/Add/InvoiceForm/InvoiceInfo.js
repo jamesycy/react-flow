@@ -28,7 +28,7 @@ type State = {
     employerAnchor: ?HTMLElement
 }
 
-class Step1 extends React.Component<FormProps, State> {
+export default class InvoiceInfoForm extends React.Component<FormProps, State> {
     styles = {
         popover: {
             height: 300,
@@ -141,6 +141,30 @@ class Step1 extends React.Component<FormProps, State> {
         })
     }
 
+    createHelper = async () => {
+        const newHelper = await firebase.firestore().collection("helper").add({
+            name: this.state.helperSearch,
+            op: "", nationality: "", age: "", refer: "", email: "", phone: ""
+        })
+        this.setState(state => {
+            state.helper = { id: newHelper.id, name: this.state.helperSearch }
+            return state
+        })
+        this.props.setFieldValue("helper", { id: newHelper.id, name: this.state.helperSearch })
+    }
+
+    createEmployer = async () => {
+        const newEmployer = await firebase.firestore().collection("employer").add({
+            name: this.state.employerSearch,
+            contacts: [], district: "", hkid: "", nickname: "", refer: ""
+        })
+        this.setState(state => {
+            state.employer = { id: newEmployer.id, name: this.state.employerSearch }
+            return state
+        })
+        this.props.setFieldValue("employer", { id: newEmployer.id, name: this.state.employerSearch })
+    }
+
     render() {
         const { values, isSubmitting, handleChange } = this.props
         return (
@@ -170,6 +194,9 @@ class Step1 extends React.Component<FormProps, State> {
                         <ClickAwayListener onClickAway={this.closeHelperPopper}>
                             <Paper>
                                 <List>
+                                    <ListItem onClick={this.createHelper}>
+                                        <ListItemText>Create New helper</ListItemText>
+                                    </ListItem>
                                     { this.filteredHelperSuggestions().map((helper, i) => (
                                         <ListItem key={i}>
                                             <ListItemText onClick={() => this.setHelper(helper)}>{ helper.name }</ListItemText>
@@ -191,9 +218,12 @@ class Step1 extends React.Component<FormProps, State> {
                         <ClickAwayListener onClickAway={this.closeEmployerPopper}>
                             <Paper>
                                 <List>
+                                    <ListItem onClick={this.createEmployer}>
+                                        <ListItemText>Create New Employer</ListItemText>
+                                    </ListItem>
                                     { this.filteredEmployerSuggestions().map((employer, i) => (
-                                        <ListItem key={i}>
-                                            <ListItemText onClick={() => this.setEmployer(employer)}>{ employer.name }</ListItemText>
+                                        <ListItem key={i} onClick={() => this.setEmployer(employer)}>
+                                            <ListItemText>{ employer.name }</ListItemText>
                                         </ListItem>
                                     )) }
                                 </List>
@@ -206,5 +236,3 @@ class Step1 extends React.Component<FormProps, State> {
         )
     }
 }
-
-export default Step1

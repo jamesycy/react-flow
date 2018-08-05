@@ -1,10 +1,19 @@
 // @flow
 import React from 'react'
 import { withFormik } from 'formik'
-import { Stepper, Step, StepLabel, Button, Grid } from '@material-ui/core'
+import { Stepper, Step, StepLabel, Button, IconButton, Grid } from '@material-ui/core'
+import { Save } from "@material-ui/icons"
 import InvoiceType from '../../../types/InvoiceFormType'
 
-import Step1 from './Step1'
+import moment from 'moment'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
+import Step1 from './InvoiceInfo'
+import Step2 from './PaymentInfo'
+import Step3 from './Immigration'
+import Step4 from './Consulate'
+import Step5 from './Arrival'
 
 type FormProps = {
     values: InvoiceType,
@@ -39,9 +48,17 @@ class InvoiceFormWrapper extends React.Component<FormProps, FormState> {
         }
     }
 
+    submit = () => {
+        this.setState(state => {
+            state.currentStep = 0
+            return state
+        })
+        this.props.handleSubmit()
+    }
+
     render() {
         const { currentStep, totalSteps, stepLabels } = this.state
-        const { values, isSubmitting, handleChange, handleSubmit, setFieldValue } = this.props
+        const { values, isSubmitting, handleChange, setFieldValue } = this.props
         return (
             <React.Fragment>
                 <Stepper activeStep={currentStep}>
@@ -52,12 +69,22 @@ class InvoiceFormWrapper extends React.Component<FormProps, FormState> {
                     ))}
                 </Stepper>
 
-                { currentStep === 0 && <Step1 values={values} isSubmitting={isSubmitting} handleChange={handleChange} setFieldValue={setFieldValue} /> }
+                { currentStep === 0 && <Step1 {...{ values, isSubmitting, handleChange, setFieldValue }} /> }
+                { currentStep === 1 && <Step2 {...{ values, isSubmitting, handleChange }} /> }
+                { currentStep === 2 && <Step3 {...{ values, isSubmitting, handleChange }} /> }
+                { currentStep === 3 && <Step4 {...{ values, isSubmitting, handleChange }} /> }
+                { currentStep === 4 && <Step5 {...{ values, isSubmitting, handleChange }} />}
 
                 <Grid container style={{ marginTop: 20 }}>
                     <Grid item xs={12}>
-                        <Button disabled={currentStep <= 0} onClick={this.prevStep}>Previous</Button>
-                        <Button disabled={currentStep === totalSteps} onClick={handleSubmit}>Next</Button>
+                        <Button disabled={currentStep <= 0 || isSubmitting} onClick={this.prevStep}>Previous</Button>
+                        { currentStep !== 5 ?
+                            <Button disabled={currentStep === totalSteps} onClick={this.nextStep}>Next</Button>
+                            :
+                            <IconButton color="primary" disabled={isSubmitting} onClick={this.submit}>
+                                <Save/>
+                            </IconButton>
+                        }
                     </Grid>
                 </Grid>
             </React.Fragment>
@@ -66,9 +93,17 @@ class InvoiceFormWrapper extends React.Component<FormProps, FormState> {
 }
 
 export default withFormik({
-    handleSubmit: (values, { setSubmitting, resetForm }) => {
-        console.log(values)
+    handleSubmit: async (values, { setSubmitting, resetForm }) => {
+        values.created_at = moment().format()
+        const snapshot: firebase.firestore.DocumentData = await firebase.firestore().collection("invoice").add(values)
+        await firebase.firestore().collection("invoice_index").doc(snapshot.id).set({
+            created_at: values.created_at,
+            employer: values.employer,
+            helper: values.helper,
+            invoice_no: values.invoice_no
+        })
         setSubmitting(false)
+        resetForm()
     },
     mapPropsToValues: (values) => ({
         invoice_no: "", type: "", employment_contract_no: "",

@@ -110,4 +110,26 @@ async function FixFSEmployerCreatedAt() {
     })
 }
 
-FixFSInvoiceDateFormat()
+async function FixFSInvoiceIndex() {
+    const batch = firebase.firestore().batch()
+    const snapshot = await firebase.firestore().collection("invoice").get()
+    snapshot.forEach(function(invoice) {
+        batch.set(firebase.firestore().collection("invoice_index").doc(invoice.id), {
+            created_at: invoice.data().created_at,
+            helper: {
+                id: invoice.data().helper.id,
+                name: invoice.data().helper.name
+            },
+            employer: {
+                id: invoice.data().employer.id,
+                name: invoice.data().employer.name
+            },
+            invoice_no: invoice.data().invoice_no
+        })
+    })
+    batch.commit().then(function() {
+        console.log("FIX Invoice Index")
+    })
+}
+
+FixFSInvoiceIndex()

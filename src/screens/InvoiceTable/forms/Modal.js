@@ -25,7 +25,7 @@ export default class InfoFormWrapper extends React.Component<ModalFormProps> {
     styles = {
         modal: {
             width: '90%',
-            padding: 10,
+            padding: 20,
             position: 'absolute',
             top: 50,
             left: '5%'
@@ -36,7 +36,6 @@ export default class InfoFormWrapper extends React.Component<ModalFormProps> {
         const id = this.props.values.id
         const batch = firebase.firestore().batch()
         batch.update(firebase.firestore().collection("invoice").doc(id), values)
-        // batch.update(firebase.firestore().collection("invoice_index").doc(id), {invoice_no: values.invoice_no})
         await batch.commit()
         setSubmitting(false)
     }
@@ -55,11 +54,12 @@ export default class InfoFormWrapper extends React.Component<ModalFormProps> {
         return (
             <Modal open={toggle !== "" && values !== null} onClose={closePrompt} style={{ overflowY: 'scroll' }}>
                 <Paper style={this.styles.modal}>
-                    { this.props.toggle !== "employer" || this.props.toggle !== "helper" &&
+                    { this.props.toggle !== "employer" || this.props.toggle !== "helper" ?
                         <Formik 
                             initialValues={values}
                             onSubmit={(values, { setSubmitting }) => this.submitInvoiceForm(values, setSubmitting)}
                             render={props => this.renderForm(props) }/>
+                        : null
                     }
                     { this.props.toggle === "employer" && <EmployerForm id={values.employer.id} /> }
                     { this.props.toggle === "helper" && <HelperForm id={values.helper.id} /> }
