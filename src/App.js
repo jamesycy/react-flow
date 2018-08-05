@@ -38,7 +38,6 @@ class App extends React.Component<any, State> {
   }
 
   render() {
-    console.log(this.state.authenticated)
     return (
       <React.Fragment>
         { this.state.authenticated ? 

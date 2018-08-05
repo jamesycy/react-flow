@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Paper, Grid, TextField, List, ListItem, ListItemText, ListSubheader, Avatar } from '@material-ui/core'
+import { Paper, Grid, TextField, ListItemText, ListSubheader, Avatar, MenuList, MenuItem } from '@material-ui/core'
 import { Receipt, Face, PersonPin } from '@material-ui/icons'
 
 import InvoiceDialog from './InvoiceDialog'
@@ -122,45 +122,45 @@ export default class SearchIndex extends React.Component<any,State> {
                         <Grid container spacing={16}>
                             <Grid item xs={12}>
                                 { this.state.results && this.state.results.invoice && 
-                                    <List>
+                                    <MenuList>
                                         <ListSubheader>Results in "Invoices"</ListSubheader>
                                         { this.state.results.invoice.map((result, i) => (
-                                            <ListItem key={i} onClick={() => this.showDialog("invoice", result.id)}>
+                                            <MenuItem key={i} onClick={() => this.showDialog("invoice", result.id)}>
                                                 <Avatar>
                                                     <Receipt/>
                                                 </Avatar>
                                                 <ListItemText primary={result.data().invoice_no} secondary={`${result.data().helper.name} - ${result.data().employer.name}`} />
-                                            </ListItem>
+                                            </MenuItem>
                                         )) }
-                                    </List>
+                                    </MenuList>
                                 }
 
                                 { this.state.results && this.state.results.employer && 
-                                    <List>
+                                    <MenuList>
                                         <ListSubheader>Results in "Employer"</ListSubheader>
                                         { this.state.results.employer.map((result, i) => (
-                                            <ListItem key={i} onClick={() => this.showDialog("employer", result.id)}>
+                                            <MenuItem key={i} onClick={() => this.showDialog("employer", result.id)}>
                                                 <Avatar>
                                                     <Face/>
                                                 </Avatar>
                                                 <ListItemText primary={result.data().name} secondary={result.data().nickname || "-" } />
-                                            </ListItem>
+                                            </MenuItem>
                                         ))}
-                                    </List>
+                                    </MenuList>
                                 }
 
                                 { this.state.results && this.state.results.helper && 
-                                    <List>
+                                    <MenuList>
                                         <ListSubheader>Results in "Helper"</ListSubheader>
                                         { this.state.results.helper.map((result, i) => (
-                                            <ListItem key={i} onClick={() => this.showDialog("helper", result.id)}>
+                                            <MenuItem key={i} onClick={() => this.showDialog("helper", result.id)}>
                                                 <Avatar>
                                                     <PersonPin/>
                                                 </Avatar>
                                                 <ListItemText primary={result.data().name} secondary={result.data().op || "-"} />
-                                            </ListItem>
+                                            </MenuItem>
                                         ))}
-                                    </List>
+                                    </MenuList>
                                 }
                             </Grid>
                         </Grid>

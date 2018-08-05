@@ -7,6 +7,7 @@ import InvoiceTable from '../screens/InvoiceTable/InvoiceTable'
 import RemarkList from '../screens/RemarkList/RemarkList'
 import AddForm from '../screens/Add/Index'
 import Search from '../screens/Search/Index'
+import Settings from '../screens/Settings/Index'
 
 type navigationProps = {
   navigations: Navigation
@@ -22,6 +23,7 @@ class Router extends React.Component<navigationProps> {
         { currentIndex === 1 && <RemarkList /> }
         { currentIndex === 2 && <AddForm /> }
         { currentIndex === 3 && <Search /> }
+        { currentIndex === 4 && <Settings /> }
       </div>
     )
   }
