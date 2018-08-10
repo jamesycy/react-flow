@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Paper, TextField, Button } from '@material-ui/core'
+import { Paper, TextField, Button, Grid, Typography } from '@material-ui/core'
 import { withFormik } from 'formik'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -18,15 +18,39 @@ type Props = {
 }
 
 class Login extends React.Component<Props> {
+    styles = {
+        container: {
+            marginTop: 100,
+            width: "50%",
+            height: "50%",
+            padding: 20,
+            marginLeft: "auto",
+            marginRight: "auto"
+        },
+    }
+
     render() {
         const { values, handleChange, handleSubmit, isSubmitting } = this.props
         return (
-            <Paper style={{ flexGrow: 1, display: "flex", height: "100%" }}>
-                <div style={{ justifyContent: "center", alignItems: 'center', maxWidth: 700 }}>
-                    <TextField fullWidth label="Email" type="email" value={values.email} onChange={handleChange} disabled={isSubmitting} name="email" />
-                    <TextField fullWidth label="Password" type="password" value={values.password} onChange={handleChange} disabled={isSubmitting} name="password" />
-                    <Button color="primary" onClick={handleSubmit}>Login</Button>
-                </div>
+            <Paper style={this.styles.container}>
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={16}>
+                        <Grid item xs={12}>
+                            <Typography variant="headline">Login</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField label="Email" name="email" disabled={isSubmitting} fullWidth
+                                value={values.email} onChange={handleChange} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField label="Password" name="password" disabled={isSubmitting} fullWidth type="password"
+                                value={values.password} onChange={handleChange} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button onClick={handleSubmit}>Login</Button>
+                        </Grid>
+                    </Grid>
+                </form>
             </Paper>
         )
     }
