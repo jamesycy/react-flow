@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Grid, TextField, Button, IconButton, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core'
+import { Grid, TextField, Button, IconButton, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, InputLabel } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import InvoiceType from '../../../types/Invoice'
 import firebase from 'firebase/app'
@@ -58,9 +58,15 @@ export default class InfoForm extends React.Component<FormProps, PromptControl> 
                         value={values.type} name="type" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField label="Employment Contract No." fullWidth
                         value={values.employment_contract_no} name="employment_contract_no" onChange={handleChange} disabled={isSubmitting} />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputLabel htmlFor="terminate_date">Terminate Date</InputLabel>
+                    <TextField fullWidth type="date" id="terminate_date"
+                        value={values.terminate_date} name="terminate_date" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
                 <Grid item xs={12}>

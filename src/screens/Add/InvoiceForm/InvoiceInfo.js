@@ -2,7 +2,7 @@
 import React from 'react'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-import { Grid, TextField, Popper, ClickAwayListener, Paper, List, ListItem, ListItemText, Chip } from '@material-ui/core'
+import { Grid, TextField, Popper, ClickAwayListener, Paper, List, ListItem, ListItemText, Chip, InputLabel } from '@material-ui/core'
 import InvoiceType from '../../../types/InvoiceFormType'
 
 type PersonType = {
@@ -179,9 +179,15 @@ export default class InvoiceInfoForm extends React.Component<FormProps, State> {
                         value={values.type} name="type" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField fullWidth label="Employment Contract No."
                         value={values.employment_contract_no} name="employment_contract_no" onChange={handleChange} disabled={isSubmitting} />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputLabel htmlFor="terminate_date">Terminate Date</InputLabel>
+                    <TextField fullWidth type="date" id="terminate_date"
+                        value={values.terminate_date} name="terminate_date" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
 
                 <Grid item xs={6} md={6}>

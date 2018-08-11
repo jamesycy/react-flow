@@ -4,7 +4,8 @@ export default class Invoice {
     invoice_no: string
     employment_contract_no: string
     type: string
-  
+    terminate_date: string
+
     payment: {
       pay_date: string,
       price: number,

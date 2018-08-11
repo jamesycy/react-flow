@@ -5,6 +5,7 @@ export default class Invoice {
   invoice_no: string
   employment_contract_no: string
   type: string
+  terminate_date: string
   
   helper: Helper_Index
   employer: Employer_Index
