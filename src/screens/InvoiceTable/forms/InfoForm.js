@@ -14,18 +14,18 @@ type FormProps = {
 }
 
 type PromptControl = {
-    toggle: boolean
+    toggle: boolean,
 }
 
 export default class InfoForm extends React.Component<FormProps, PromptControl> {
     state = { toggle: false }
 
     openPrompt = () => {
-        this.setState({ toggle: true })
+        this.setState({...this.state, toggle: true })
     }
     
     closePrompt = () => {
-        this.setState({ toggle: false })
+        this.setState({...this.state, toggle: false })
     }
 
     removeInvoice = async () => {
@@ -68,6 +68,8 @@ export default class InfoForm extends React.Component<FormProps, PromptControl> 
                     <TextField fullWidth type="date" id="terminate_date"
                         value={values.terminate_date} name="terminate_date" onChange={handleChange} disabled={isSubmitting} />
                 </Grid>
+
+                <br/>
 
                 <Grid item xs={12}>
                     <Button color="primary" onClick={handleSubmit}>Save</Button>

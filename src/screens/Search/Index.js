@@ -68,13 +68,10 @@ export default class SearchIndex extends React.Component<any,State> {
 
     getInvoiceResults = async () => {
         const { search } = this.state
-        const snapshot = await this.invoiceIndexRef.get()
-        return snapshot.docs.filter(item => {
-            const invoice: InvoiceType = item.data()
-            if(invoice.invoice_no.indexOf(search) > -1 || invoice.helper.name.indexOf(search) > -1 || invoice.employer.name.indexOf(search) > -1) {
-                return invoice
-            }
-        })
+        const byInvoiceNo = await this.invoiceIndexRef.where("invoice_no", ">=", search).where("invoice_no", "<=", search+"\uf8ff").limit(15).get()
+        const byHelper = await this.invoiceIndexRef.orderBy("helper.name").startAt(search).endAt(search+'\uf8ff').limit(15).get()
+        const byEmployer = await this.invoiceIndexRef.orderBy("employer.name").startAt(search).endAt(search+'\uf8ff').limit(15).get()
+        return byInvoiceNo.docs.concat(byHelper.docs).concat(byEmployer.docs)
     }
 
     getEmployerResults = async () => {
@@ -106,7 +103,6 @@ export default class SearchIndex extends React.Component<any,State> {
     }
 
     render() {
-        console.log(this.state.results)
         return (
             <React.Fragment>
                 <Grid container spacing={16} style={this.styles.container}>

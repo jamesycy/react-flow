@@ -1,13 +1,16 @@
 // @fow 
 import React from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogContentText, List, ListItem, ListItemText, ListSubheader, Divider } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, List, ListItem, ListItemText, ListSubheader, ListItemSecondaryAction, Divider, MenuItem, IconButton } from '@material-ui/core'
+import { Delete } from '@material-ui/icons'
+import moment from 'moment'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
 import InvoiceType from '../../types/Invoice'
 
 type DialogState = {
-    invoice: InvoiceType
+    invoice: InvoiceType,
+    remarks: Array<firebase.firestore.QueryDocumentSnapshot>
 }
 
 type DialogProps = {
@@ -19,12 +22,14 @@ export default class InvoiceDialog extends React.Component<DialogState, DialogPr
     invoiceRef: firebase.firestore.CollectionReference = firebase.firestore().collection("invoice")
 
     state = {
-        invoice: null
+        invoice: null,
+        remarks: []
     }
 
     async componentDidMount() {
         const snapshot = await firebase.firestore().collection("invoice").doc(this.props.id).get()
-        this.setState({ invoice: snapshot.data() })
+        const remarkSnapshot = await firebase.firestore().collection("remark").where("invoice_id", "==", this.props.id).get()
+        this.setState({ invoice: snapshot.data(), remarks: remarkSnapshot.docs })
     }
 
     render() {
@@ -37,6 +42,20 @@ export default class InvoiceDialog extends React.Component<DialogState, DialogPr
                     { !this.state.invoice && <DialogContentText>Loading Invoice Info ...</DialogContentText> }
                     { invoice && 
                         <React.Fragment>
+                            <List style={{ maxHeight: 500, overflowY: 'scroll' }} >
+                                <ListSubheader>Remarks with this Invoice</ListSubheader>
+                                { this.state.remarks.map((remark, i) => (
+                                    <MenuItem key={i}>
+                                        <ListItemText primary={`${remark.data().author} - ${remark.data().content}`} secondary={moment(remark.data().notification).format("DD/MM/YYYY")} />     
+                                        <ListItemSecondaryAction>
+                                            <IconButton color="secondary">
+                                                <Delete/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </MenuItem> 
+                                )) }
+                            </List>
+                            <Divider/>
                             <List>
                                 <ListSubheader>Invoice Info</ListSubheader>
                                 <ListItem>

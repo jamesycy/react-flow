@@ -165,7 +165,9 @@ export default class InvoiceTable extends React.Component<any, InvoiceState> {
                 <IconButton onClick={this.previousePage}>
                   <SkipPrevious />
                 </IconButton>
+              </TableCell>
 
+              <TableCell>
                 <IconButton onClick={this.nextPage}>
                   <SkipNext />
                 </IconButton>

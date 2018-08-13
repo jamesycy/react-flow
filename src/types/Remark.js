@@ -5,4 +5,5 @@ export default class Remark {
     content: string
     notification: string
     invoice_id: string
+    invoice_no: string
 }

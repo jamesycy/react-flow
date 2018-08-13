@@ -49,6 +49,10 @@ class EmployerForm extends React.Component<FormProps> {
                 </Grid>
 
                 <Grid item xs={12}>
+                    <Typography variant="headline">Contacts List</Typography>
+                </Grid>
+
+                <Grid item xs={12}>
                     <FieldArray name="contacts"
                         render={({ remove, push }) => (
                             <React.Fragment>

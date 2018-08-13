@@ -71,7 +71,7 @@ class RemarkList extends React.Component<any, RemarkState> {
                             <Avatar>
                                 <Event />
                             </Avatar>
-                            <ListItemText primary={`${remark.author} - ${remark.content}`} secondary={moment(remark.notification).format("DD/MM/YYYY")} />
+                            <ListItemText primary={`${remark.author} - ${remark.content}`} secondary={`${moment(remark.notification).format("DD/MM/YYYY")} Invoice: ${remark.invoice_no && remark.invoice_no}`} />
                             <ListItemSecondaryAction>
                                 <IconButton onClick={() => this.openDeletePrompt(remark.id)} color="secondary">
                                     <Delete/>
